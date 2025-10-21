@@ -6,7 +6,7 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-MainApplication<api>",
+            "name": "ScaleFlow",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "mainClass": "br.edu.ufersa.cc.lpoo.scale_flow.ScaleFlowApplication",
