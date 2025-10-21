@@ -9,8 +9,8 @@
             "name": "Spring Boot-MainApplication<api>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "br.org.kinflasy.MainApplication",
-            "projectName": "api",
+            "mainClass": "br.edu.ufersa.cc.lpoo.scale_flow.ScaleFlowApplication",
+            "projectName": "scale_flow",
             "args": "",
             "envFile": "${workspaceFolder}/.env",
             "vmArgs": "-Dspring.profiles.active=dev"
