@@ -1,17 +1,19 @@
 package br.edu.ufersa.cc.lpoo.scale_flow.entities.users;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Integration;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 @Entity
@@ -19,7 +21,6 @@ import lombok.experimental.Accessors;
 @Table(name = "users")
 @Data
 @Accessors(chain = false)
-@EqualsAndHashCode(callSuper = false)
 public class User {
 
     /*
@@ -42,5 +43,12 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    /*
+     * Relacionamentos não mapeados
+     */
+
+    @OneToMany(mappedBy = "user")
+    private List<Integration> integrations;
 
 }
