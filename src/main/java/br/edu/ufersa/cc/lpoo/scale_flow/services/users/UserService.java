@@ -1,4 +1,4 @@
-package br.edu.ufersa.cc.lpoo.scale_flow.auth.services;
+package br.edu.ufersa.cc.lpoo.scale_flow.services.users;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,11 +7,11 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import br.edu.ufersa.cc.lpoo.scale_flow.auth.dto.UserDto;
-import br.edu.ufersa.cc.lpoo.scale_flow.auth.dto.UserRequest;
-import br.edu.ufersa.cc.lpoo.scale_flow.auth.dto.UserWithPasswordDto;
-import br.edu.ufersa.cc.lpoo.scale_flow.entities.User;
-import br.edu.ufersa.cc.lpoo.scale_flow.repositories.UserRepository;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserRequest;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserWithPasswordDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
+import br.edu.ufersa.cc.lpoo.scale_flow.repositories.users.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 

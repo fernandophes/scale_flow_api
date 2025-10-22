@@ -1,4 +1,4 @@
-package br.edu.ufersa.cc.lpoo.scale_flow.auth.services;
+package br.edu.ufersa.cc.lpoo.scale_flow.services.auth;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import br.edu.ufersa.cc.lpoo.scale_flow.auth.dto.UserDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserDto;
 
 @Service
 public class TokenService {

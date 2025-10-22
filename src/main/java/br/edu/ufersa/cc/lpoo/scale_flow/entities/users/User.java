@@ -1,4 +1,4 @@
-package br.edu.ufersa.cc.lpoo.scale_flow.entities;
+package br.edu.ufersa.cc.lpoo.scale_flow.entities.users;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package br.edu.ufersa.cc.lpoo.scale_flow.auth.dto;
+package br.edu.ufersa.cc.lpoo.scale_flow.dto.auth;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

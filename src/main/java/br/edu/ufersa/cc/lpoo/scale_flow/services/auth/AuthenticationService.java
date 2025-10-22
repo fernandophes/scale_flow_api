@@ -1,10 +1,11 @@
-package br.edu.ufersa.cc.lpoo.scale_flow.auth.services;
+package br.edu.ufersa.cc.lpoo.scale_flow.services.auth;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import br.edu.ufersa.cc.lpoo.scale_flow.services.users.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

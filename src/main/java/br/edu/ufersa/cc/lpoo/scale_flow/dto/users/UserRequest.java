@@ -1,4 +1,4 @@
-package br.edu.ufersa.cc.lpoo.scale_flow.auth.dto;
+package br.edu.ufersa.cc.lpoo.scale_flow.dto.users;
 
 import java.time.LocalDate;
 
