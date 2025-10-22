@@ -26,27 +26,41 @@ public class UserService {
     private final UserRepository repository;
 
     public List<UserDto> findAll() {
+        // Buscar
         return repository.findAll().stream()
+
+                // Gerar DTO
                 .map(entity -> mapper.map(entity, UserDto.class))
                 .toList();
     }
 
     public UserDto create(final UserRequest request) {
-        // Salvar usuário
+        // Gerar entidade
         final var entity = mapper.map(request, User.class);
+
+        // Salvar
         final var savedUser = repository.save(entity);
 
+        // Gerar DTO
         return mapper.map(savedUser, UserDto.class);
     }
 
     public Optional<UserDto> findById(final UUID id) {
+        // Buscar
         return repository.findById(id)
+
+                // Se encontrar, gerar DTO
                 .map(entity -> mapper.map(entity, UserDto.class));
     }
 
     public UserWithPasswordDto findByEmailWithPassword(final String email) {
+        // Buscar
         return repository.findByEmail(email)
+
+                // Se encontrar, gerar DTO
                 .map(user -> mapper.map(user, UserWithPasswordDto.class))
+
+                // Senão, lançar exceção
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }
 
@@ -59,6 +73,7 @@ public class UserService {
     }
 
     public void delete(final UUID id) {
+        // Deletar
         repository.deleteById(id);
     }
 
