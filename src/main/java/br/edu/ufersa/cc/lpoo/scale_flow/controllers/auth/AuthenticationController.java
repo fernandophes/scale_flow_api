@@ -36,7 +36,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "Fazer login", security = {})
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-        final var usernamePassword = new UsernamePasswordAuthenticationToken(request.getUsername(),
+        final var usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail(),
                 request.getPassword());
 
         final var authentication = manager.authenticate(usernamePassword);

@@ -44,8 +44,8 @@ public class UserService {
                 .map(entity -> mapper.map(entity, UserDto.class));
     }
 
-    public UserWithPasswordDto findByUsernameWithPassword(final String username) {
-        return repository.findByUsername(username)
+    public UserWithPasswordDto findByEmailWithPassword(final String email) {
+        return repository.findByEmail(email)
                 .map(user -> mapper.map(user, UserWithPasswordDto.class))
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
     }

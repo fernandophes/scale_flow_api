@@ -9,6 +9,6 @@ import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
 
 }

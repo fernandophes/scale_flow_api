@@ -22,4 +22,9 @@ public class UserWithPasswordDto extends UserDto implements UserDetails {
         return Collections.emptyList();
     }
 
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
 }

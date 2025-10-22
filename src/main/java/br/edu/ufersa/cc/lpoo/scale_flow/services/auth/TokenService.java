@@ -21,7 +21,7 @@ public class TokenService {
     public String generateToken(final UserDto user) {
         return JWT.create()
                 .withIssuer("kinflasy-app")
-                .withSubject(user.getUsername())
+                .withSubject(user.getEmail())
                 .withExpiresAt(generateExpirationDate())
                 .sign(Algorithm.HMAC256(secret));
     }
