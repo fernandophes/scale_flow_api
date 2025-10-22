@@ -81,7 +81,7 @@ public class BandService {
                 });
     }
 
-    public Optional<BandDto> changeJoinCode(final UUID id) {
+    public Optional<BandWithJoinCodeDto> changeJoinCode(final UUID id) {
         // Buscar original
         return repository.findById(id)
 
@@ -95,7 +95,7 @@ public class BandService {
                     repository.save(original);
 
                     // Gerar DTO
-                    return mapper.map(original, BandDto.class);
+                    return mapper.map(original, BandWithJoinCodeDto.class);
                 });
     }
 
