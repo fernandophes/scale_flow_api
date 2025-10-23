@@ -20,6 +20,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public class BandService {
 
+    private static final int JOIN_CODE_SIZE = 6;
+
     private final ModelMapper mapper;
 
     private final BandRepository repository;
@@ -38,8 +40,7 @@ public class BandService {
         val entity = mapper.map(request, Band.class);
 
         // Definir código de ingresso
-        val joinCode = RandomStringUtils.secure().nextAlphanumeric(6);
-        entity.setJoinCode(joinCode);
+        entity.setJoinCode(generateJoinCode());
 
         // Salvar
         val saved = repository.save(entity);
@@ -96,8 +97,7 @@ public class BandService {
                 // Se encontrar...
                 .map(original -> {
                     // Definir novo código de ingresso
-                    val joinCode = RandomStringUtils.secure().nextAlphanumeric(6);
-                    original.setJoinCode(joinCode);
+                    original.setJoinCode(generateJoinCode());
 
                     // Salvar
                     repository.save(original);
@@ -110,6 +110,12 @@ public class BandService {
     public void delete(final UUID id) {
         // Deletar
         repository.deleteById(id);
+    }
+
+    private String generateJoinCode() {
+        return RandomStringUtils.secure()
+                .nextAlphanumeric(JOIN_CODE_SIZE)
+                .toUpperCase();
     }
 
 }
