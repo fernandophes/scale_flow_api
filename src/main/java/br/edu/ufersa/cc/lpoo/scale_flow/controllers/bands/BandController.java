@@ -47,6 +47,13 @@ public class BandController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("{id}/join-code")
+    public ResponseEntity<BandWithJoinCodeDto> findByIdWithJoinCode(@PathVariable final UUID id) {
+        return service.findByIdWithJoinCode(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @GetMapping("join-code/{joinCode}")
     public ResponseEntity<BandDto> findByJoinCode(@PathVariable final String joinCode) {
         return service.findByJoinCode(joinCode)

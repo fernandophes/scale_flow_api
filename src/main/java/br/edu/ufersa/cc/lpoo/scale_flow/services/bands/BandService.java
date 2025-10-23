@@ -56,6 +56,14 @@ public class BandService {
                 .map(entity -> mapper.map(entity, BandDto.class));
     }
 
+    public Optional<BandWithJoinCodeDto> findByIdWithJoinCode(final UUID id) {
+        // Buscar
+        return repository.findById(id)
+
+                // Se encontrar, gerar DTO
+                .map(entity -> mapper.map(entity, BandWithJoinCodeDto.class));
+    }
+
     public Optional<BandDto> findByJoinCode(final String joinCode) {
         // Buscar
         return repository.findByJoinCode(joinCode)
