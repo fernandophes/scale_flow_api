@@ -11,8 +11,13 @@ import org.springframework.stereotype.Service;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Integration;
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
+import br.edu.ufersa.cc.lpoo.scale_flow.enums.IntegrationType;
 import br.edu.ufersa.cc.lpoo.scale_flow.repositories.bands.BandRepository;
+import br.edu.ufersa.cc.lpoo.scale_flow.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -25,6 +30,8 @@ public class BandService {
     private final ModelMapper mapper;
 
     private final BandRepository repository;
+
+    private final AuthUtils authUtils;
 
     public List<BandDto> listAll() {
         // Buscar
@@ -110,6 +117,31 @@ public class BandService {
     public void delete(final UUID id) {
         // Deletar
         repository.deleteById(id);
+    }
+
+    public Optional<IntegrationDto> join(final String joinCode) {
+        val sanitized = joinCode.toUpperCase().trim();
+
+        return repository.findByJoinCode(sanitized)
+                .map(band -> {
+                    // Obter usuário logado
+                    val loggedUser = mapper.map(authUtils.getLoggedUser(), User.class);
+
+                    // Construir integração
+                    val integration = new Integration();
+                    integration.setBand(band);
+                    integration.setUser(loggedUser);
+                    integration.setType(IntegrationType.MEMBER);
+
+                    // Adicionar à banda
+                    band.getIntegrations().add(integration);
+
+                    // Salvar
+                    repository.save(band);
+
+                    // Gerar DTO
+                    return mapper.map(integration, IntegrationDto.class);
+                });
     }
 
     private String generateJoinCode() {

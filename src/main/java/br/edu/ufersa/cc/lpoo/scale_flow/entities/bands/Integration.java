@@ -14,12 +14,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Entity
 @DynamicUpdate
-@Table(name = "integrations")
+@Table(name = "integrations", uniqueConstraints = @UniqueConstraint(columnNames = { "band_id", "user_id" }))
 @Data
 @Accessors(chain = false)
 public class Integration {

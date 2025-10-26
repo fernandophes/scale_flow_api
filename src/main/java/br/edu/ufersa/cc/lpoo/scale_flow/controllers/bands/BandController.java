@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.exceptions.UserAlreadyInBandException;
 import br.edu.ufersa.cc.lpoo.scale_flow.services.bands.BandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -80,6 +83,15 @@ public class BandController {
     public ResponseEntity<Void> delete(@PathVariable final UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("join/{joinCode}")
+    public ResponseEntity<IntegrationDto> join(@PathVariable final String joinCode) {
+        try {
+            return handleOptional(service.join(joinCode));
+        } catch (final DataIntegrityViolationException e) {
+            throw new UserAlreadyInBandException("Você já faz parte dessa banda", e);
+        }
     }
 
     private <T> ResponseEntity<T> handleOptional(final Optional<T> optional) {

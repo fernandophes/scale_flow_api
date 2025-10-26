@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,7 +45,7 @@ public class Band {
      * Relacionamentos não mapeados
      */
 
-    @OneToMany(mappedBy = "band")
+    @OneToMany(mappedBy = "band", cascade = CascadeType.ALL)
     private List<Integration> integrations;
 
 }
