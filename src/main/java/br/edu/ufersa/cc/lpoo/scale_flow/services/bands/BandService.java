@@ -157,7 +157,7 @@ public class BandService {
                 .orElseGet(Collections::emptyList);
     }
 
-    public Optional<MusicDto> createMusic(final UUID id, final MusicRequest request) {
+    public Optional<MusicDto> createMusic(final UUID id, final MusicRequest.WithThemes request) {
         return repository.findById(id)
                 .map(entity -> musicService.create(entity, request));
     }

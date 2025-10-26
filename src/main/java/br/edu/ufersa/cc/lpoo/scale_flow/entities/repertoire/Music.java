@@ -18,6 +18,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -54,7 +55,9 @@ public class Music {
     private String artist;
 
     @ManyToMany
-    @JoinTable(name = "musics_themes", joinColumns = @JoinColumn(name = "music_id"), inverseJoinColumns = @JoinColumn(name = "theme_id"))
+    @JoinTable(name = "musics_themes", joinColumns = { @JoinColumn(name = "music_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "theme_id") }, uniqueConstraints = {
+                    @UniqueConstraint(columnNames = { "music_id", "theme_id" }) })
     private List<Theme> themes;
 
 }

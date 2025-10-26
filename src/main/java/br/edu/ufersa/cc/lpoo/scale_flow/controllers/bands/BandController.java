@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,11 +19,13 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.exceptions.UserAlreadyInBandException;
 import br.edu.ufersa.cc.lpoo.scale_flow.services.bands.BandService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -93,6 +96,19 @@ public class BandController {
         } catch (final DataIntegrityViolationException e) {
             throw new UserAlreadyInBandException("Você já faz parte dessa banda", e);
         }
+    }
+
+    @GetMapping("{id}/musics")
+    @Operation(summary = "Listar músicas", description = "Listar todas as músicas do repertório da banda")
+    public ResponseEntity<List<MusicDto>> listMusics(@PathVariable final UUID id) {
+        return ResponseEntity.ok(service.listMusics(id));
+    }
+
+    @PostMapping("{id}/musics")
+    @Operation(summary = "Cadastrar música", description = "Cadastrar nova música no repertório da banda")
+    public ResponseEntity<MusicDto> createMusic(@PathVariable final UUID id,
+            @RequestBody @Valid final MusicRequest.WithThemes request) {
+        return handleOptional(service.createMusic(id, request));
     }
 
     private <T> ResponseEntity<T> handleOptional(final Optional<T> optional) {

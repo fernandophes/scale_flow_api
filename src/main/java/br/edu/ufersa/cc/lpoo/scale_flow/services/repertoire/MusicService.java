@@ -1,5 +1,6 @@
 package br.edu.ufersa.cc.lpoo.scale_flow.services.repertoire;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,11 +26,14 @@ public class MusicService {
     private final MusicRepository repository;
     private final ThemeRepository themeRepository;
 
-    public MusicDto create(final Band band, final MusicRequest request) {
+    public MusicDto create(final Band band, final MusicRequest.WithThemes request) {
         val entity = mapper.map(request, Music.class);
         entity.setOwnerBand(band);
+        entity.setThemes(new ArrayList<>());
 
         val saved = repository.save(entity);
+        addThemes(saved.getId(), request.getThemes());
+
         return mapper.map(saved, MusicDto.class);
     }
 
@@ -59,31 +63,41 @@ public class MusicService {
         repository.deleteById(id);
     }
 
-    public void addThemes(final UUID id, final Collection<String> themeNames) {
+    public Optional<MusicDto> addThemes(final UUID id, final Collection<String> themeNames) {
         // Buscar original
-        repository.findById(id)
+        return repository.findById(id)
 
                 // Se encontrar...
-                .ifPresent(original -> {
+                .map(original -> {
                     // Gerar entidades dos temas
                     val themes = themeNames.stream()
+
+                            // Remover temas duplicados do request
+                            .distinct()
+
+                            // Encontrar tema pré-existente ou criar
                             .map(themeRepository::findByNameOrCreate)
+
+                            // Desconsiderar temas já cadastrados
+                            .filter(theme -> !original.getThemes().contains(theme))
                             .toList();
 
-                    // Adicionar
+                    // Adicionar à entidade
                     original.getThemes().addAll(themes);
 
                     // Salvar
-                    repository.save(original);
+                    val saved = repository.save(original);
+
+                    return mapper.map(saved, MusicDto.class);
                 });
     }
 
-    public void removeThemes(final UUID id, final Collection<String> themeNames) {
+    public Optional<MusicDto> removeThemes(final UUID id, final Collection<String> themeNames) {
         // Buscar original
-        repository.findById(id)
+        return repository.findById(id)
 
                 // Se encontrar...
-                .ifPresent(original -> {
+                .map(original -> {
                     // Gerar entidades dos temas
                     val themes = themeNames.stream()
                             .map(themeRepository::findByName)
@@ -95,7 +109,9 @@ public class MusicService {
                     original.getThemes().removeAll(themes);
 
                     // Salvar
-                    repository.save(original);
+                    val saved = repository.save(original);
+
+                    return mapper.map(saved, MusicDto.class);
                 });
     }
 
