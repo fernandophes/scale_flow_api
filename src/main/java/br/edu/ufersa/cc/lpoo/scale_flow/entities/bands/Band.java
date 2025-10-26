@@ -5,12 +5,17 @@ import java.util.UUID;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.repertoire.Music;
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -47,5 +52,12 @@ public class Band {
 
     @OneToMany(mappedBy = "band", cascade = CascadeType.ALL)
     private List<Integration> integrations;
+
+    @ManyToMany
+    @JoinTable(name = "integrations", joinColumns = @JoinColumn(name = "band_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> integrants;
+
+    @OneToMany(mappedBy = "ownerBand")
+    private List<Music> musics;
 
 }

@@ -5,12 +5,14 @@ import java.util.UUID;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Integration;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -50,5 +52,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Integration> integrations;
+
+    @ManyToMany(mappedBy = "integrants")
+    private List<Band> bands;
 
 }

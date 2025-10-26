@@ -36,8 +36,12 @@ public class Music {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    /**
+     * Chaves estrangeiras
+     */
+
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Band owner;
+    private Band ownerBand;
 
     /*
      * Dados primitivos
