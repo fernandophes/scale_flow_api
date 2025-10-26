@@ -54,7 +54,7 @@ public class Music {
     private String artist;
 
     @ManyToMany
-    @JoinTable(name = "musics_topics", joinColumns = @JoinColumn(name = "music_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
-    private List<Topic> topics;
+    @JoinTable(name = "musics_themes", joinColumns = @JoinColumn(name = "music_id"), inverseJoinColumns = @JoinColumn(name = "theme_id"))
+    private List<Theme> themes;
 
 }

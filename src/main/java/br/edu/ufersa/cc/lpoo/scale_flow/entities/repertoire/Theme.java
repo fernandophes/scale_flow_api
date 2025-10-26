@@ -17,10 +17,10 @@ import lombok.experimental.Accessors;
 
 @Entity
 @DynamicUpdate
-@Table(name = "topics")
+@Table(name = "themes")
 @Data
 @Accessors(chain = false)
-public class Topic {
+public class Theme {
 
     /*
      * Chave primária
@@ -37,7 +37,7 @@ public class Topic {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "topics")
+    @ManyToMany(mappedBy = "themes")
     private List<Music> musics;
 
 }
