@@ -16,6 +16,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 @Component
 @AllArgsConstructor
@@ -30,10 +31,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         recoverToken(request)
                 .ifPresent(token -> {
-                    final var email = tokenService.validateToken(token);
-                    final var user = userService.findByEmailWithPassword(email);
+                    val email = tokenService.validateToken(token);
+                    val user = userService.findByEmailWithPassword(email);
 
-                    final var authentication = new UsernamePasswordAuthenticationToken(user, null,
+                    val authentication = new UsernamePasswordAuthenticationToken(user, null,
                             user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 });

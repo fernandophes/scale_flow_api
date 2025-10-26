@@ -3,6 +3,8 @@ package br.edu.ufersa.cc.lpoo.scale_flow.enums;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.val;
+
 public enum IntegrationType {
 
     OBSERVER,
@@ -12,7 +14,7 @@ public enum IntegrationType {
     private final Set<IntegrationType> includedValues = new HashSet<>();
 
     private IntegrationType(final IntegrationType... includedValues) {
-        for (final var value : includedValues) {
+        for (val value : includedValues) {
             this.includedValues.add(value);
             this.includedValues.addAll(value.includedValues);
         }

@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -44,7 +45,7 @@ public class BandController {
     @PostMapping
     @Operation(summary = "Cadastrar", description = "Cadastrar nova banda")
     public ResponseEntity<BandWithJoinCodeDto> create(@RequestBody final BandRequest request) {
-        final var body = service.create(request);
+        val body = service.create(request);
         return ResponseEntity.status(201).body(body);
     }
 

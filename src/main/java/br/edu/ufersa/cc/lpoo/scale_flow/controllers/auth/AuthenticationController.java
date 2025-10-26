@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -36,12 +37,12 @@ public class AuthenticationController {
     @PostMapping("/login")
     @Operation(summary = "Fazer login", security = {})
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-        final var usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail(),
+        val usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail(),
                 request.getPassword());
 
-        final var authentication = manager.authenticate(usernamePassword);
-        final var token = tokenService.generateToken((UserDto) authentication.getPrincipal());
-        final var response = new LoginResponse().setToken(token);
+        val authentication = manager.authenticate(usernamePassword);
+        val token = tokenService.generateToken((UserDto) authentication.getPrincipal());
+        val response = new LoginResponse().setToken(token);
 
         return ResponseEntity.ok(response);
     }
@@ -50,7 +51,7 @@ public class AuthenticationController {
     @Operation(summary = "Cadastrar-se", security = {})
     public ResponseEntity<UserDto> register(@RequestBody UserRequest request) {
         // Criptografar a senha
-        final var encrypted = encoder.encode(request.getPassword());
+        val encrypted = encoder.encode(request.getPassword());
         request.setPassword(encrypted);
 
         return ResponseEntity.ok(service.create(request));

@@ -14,6 +14,7 @@ import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
 import br.edu.ufersa.cc.lpoo.scale_flow.repositories.users.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 @Service
 @AllArgsConstructor
@@ -36,10 +37,10 @@ public class UserService {
 
     public UserDto create(final UserRequest request) {
         // Gerar entidade
-        final var entity = mapper.map(request, User.class);
+        val entity = mapper.map(request, User.class);
 
         // Salvar
-        final var savedUser = repository.save(entity);
+        val savedUser = repository.save(entity);
 
         // Gerar DTO
         return mapper.map(savedUser, UserDto.class);
@@ -65,7 +66,7 @@ public class UserService {
     }
 
     public UserDto update(final UUID id, final UserRequest form) {
-        final var original = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
+        val original = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
         mapper.map(form, original);
 
         repository.save(original);
