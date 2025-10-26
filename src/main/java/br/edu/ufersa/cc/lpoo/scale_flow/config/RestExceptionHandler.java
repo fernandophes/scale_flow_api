@@ -31,8 +31,8 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ValidationError>> handleValidationErrors(final MethodArgumentNotValidException ex) {
-        val errors = ex.getFieldErrors().stream()
+    public ResponseEntity<List<ValidationError>> handleValidationErrors(final MethodArgumentNotValidException e) {
+        val errors = e.getFieldErrors().stream()
                 .map(ValidationError::new)
                 .toList();
 
@@ -40,14 +40,14 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrityViolation(final DataIntegrityViolationException ex) {
-        for (var cause = ex.getCause(); cause != null; cause = cause.getCause()) {
+    public ResponseEntity<String> handleDataIntegrityViolation(final DataIntegrityViolationException e) {
+        for (var cause = e.getCause(); cause != null; cause = cause.getCause()) {
             if (cause instanceof SQLException sqlException && sqlException.getSQLState().equals("23505")) {
                 return ResponseEntity.badRequest().body("Registro duplicado");
             }
         }
 
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(UserAlreadyInBandException.class)
@@ -62,8 +62,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleOthers(final Exception ex) {
-        return ResponseEntity.internalServerError().body(ex.getMessage());
+    public ResponseEntity<String> handleOthers(final Exception e) {
+        log.error("Erro interceptado", e);
+        return ResponseEntity.internalServerError().body(e.getMessage());
     }
 
 }
