@@ -1,5 +1,6 @@
 package br.edu.ufersa.cc.lpoo.scale_flow.services.bands;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,11 +13,14 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Integration;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
 import br.edu.ufersa.cc.lpoo.scale_flow.enums.IntegrationType;
 import br.edu.ufersa.cc.lpoo.scale_flow.repositories.bands.BandRepository;
+import br.edu.ufersa.cc.lpoo.scale_flow.services.repertoire.MusicService;
 import br.edu.ufersa.cc.lpoo.scale_flow.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -32,6 +36,7 @@ public class BandService {
     private final BandRepository repository;
 
     private final AuthUtils authUtils;
+    private final MusicService musicService;
 
     public List<BandDto> listAll() {
         // Buscar
@@ -142,6 +147,19 @@ public class BandService {
                     // Gerar DTO
                     return mapper.map(integration, IntegrationDto.class);
                 });
+    }
+
+    public List<MusicDto> listMusics(final UUID id) {
+        return repository.findById(id)
+                .map(entity -> entity.getMusics().stream()
+                        .map(music -> mapper.map(music, MusicDto.class))
+                        .toList())
+                .orElseGet(Collections::emptyList);
+    }
+
+    public Optional<MusicDto> createMusic(final UUID id, final MusicRequest request) {
+        return repository.findById(id)
+                .map(entity -> musicService.create(entity, request));
     }
 
     private String generateJoinCode() {
