@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 
 @Entity
 @DynamicUpdate
-@Table(name = "bands")
+@Table(name = "difficulties")
 @Data
 @Accessors(chain = false)
 public class Difficulty {

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.RoleDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.RoleRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
-import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Role;
 import br.edu.ufersa.cc.lpoo.scale_flow.repositories.bands.RoleRepository;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -23,11 +22,7 @@ public class RoleService {
     private final RoleRepository repository;
 
     public RoleDto create(final Band band, final RoleRequest request) {
-        val entity = mapper.map(request, Role.class);
-        entity.setOwnerBand(band);
-
-        val saved = repository.save(entity);
-
+        val saved = repository.findByOwnerBandAndNameOrCreate(band, request.getName());
         return mapper.map(saved, RoleDto.class);
     }
 
