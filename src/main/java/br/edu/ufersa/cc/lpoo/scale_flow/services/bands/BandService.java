@@ -57,10 +57,9 @@ public class BandService {
 
         // Adicionar usuário logado como ADM
         val loggedUser = mapper.map(authUtils.getLoggedUser(), User.class);
-        val admin = new Integration();
-        admin.setBand(entity);
-        admin.setUser(loggedUser);
-        admin.setType(IntegrationType.ADMIN);
+        val admin = Integration.builder()
+                .band(entity).user(loggedUser).type(IntegrationType.ADMIN)
+                .build();
         entity.setIntegrations(List.of(admin));
 
         // Definir código de ingresso
@@ -145,10 +144,9 @@ public class BandService {
                     val loggedUser = mapper.map(authUtils.getLoggedUser(), User.class);
 
                     // Construir integração
-                    val integration = new Integration();
-                    integration.setBand(band);
-                    integration.setUser(loggedUser);
-                    integration.setType(IntegrationType.MEMBER);
+                    val integration = Integration.builder()
+                            .band(band).user(loggedUser).type(IntegrationType.MEMBER)
+                            .build();
 
                     // Adicionar à banda
                     band.getIntegrations().add(integration);

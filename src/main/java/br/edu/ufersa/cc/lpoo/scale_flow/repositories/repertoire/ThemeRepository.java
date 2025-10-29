@@ -17,8 +17,8 @@ public interface ThemeRepository extends JpaRepository<Theme, UUID> {
     default Theme findByNameOrCreate(final String name) {
         return findByName(name)
                 .orElseGet(() -> {
-                    val theme = new Theme();
-                    theme.setName(name);
+                    val theme = Theme.builder()
+                            .name(name).build();
 
                     return save(theme);
                 });

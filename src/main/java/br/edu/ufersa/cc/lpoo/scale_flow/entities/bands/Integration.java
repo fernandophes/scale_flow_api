@@ -15,13 +15,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Entity
 @DynamicUpdate
 @Table(name = "integrations", uniqueConstraints = @UniqueConstraint(columnNames = { "band_id", "user_id" }))
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = false)
 public class Integration {
 
