@@ -57,7 +57,7 @@ public class Band {
     @JoinTable(name = "integrations", joinColumns = @JoinColumn(name = "band_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> integrants;
 
-    @OneToMany(mappedBy = "ownerBand")
+    @OneToMany(mappedBy = "ownerBand", cascade = CascadeType.ALL)
     private List<Music> musics;
 
 }

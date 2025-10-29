@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.hibernate.annotations.DynamicUpdate;
 
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,7 +40,7 @@ public class Music {
      * Chaves estrangeiras
      */
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Band ownerBand;
 
     /*
