@@ -20,6 +20,7 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithUserDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.exceptions.UserAlreadyInBandException;
@@ -88,6 +89,12 @@ public class BandController {
     public ResponseEntity<Void> delete(@PathVariable final UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{id}/integrants")
+    @Operation(summary = "Listar integrantes da banda")
+    public ResponseEntity<List<IntegrationWithUserDto>> listIntegrations(@PathVariable final UUID id) {
+        return ResponseEntity.ok(service.listIntegrations(id));
     }
 
     @PostMapping("join/{joinCode}")

@@ -14,6 +14,7 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithUserDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
@@ -48,10 +49,6 @@ public class BandService {
                 // Gerar DTO
                 .map(entity -> mapper.map(entity, BandDto.class))
                 .toList();
-    }
-
-    public List<IntegrationWithBandDto> listIntegrationsByLoggedUser() {
-        return userService.listIntegrations(authUtils.getLoggedUser().getId());
     }
 
     public BandWithJoinCodeDto create(final BandRequest request) {
@@ -162,6 +159,23 @@ public class BandService {
                     // Gerar DTO
                     return mapper.map(integration, IntegrationDto.class);
                 });
+    }
+
+    public List<IntegrationWithUserDto> listIntegrations(final UUID id) {
+        // Buscar banda
+        return repository.findById(id)
+                // Se existir, trazer suas integrações
+                .map(band -> band.getIntegrations().stream()
+                        // Transformar em lista de DTOs
+                        .map(entity -> mapper.map(entity, IntegrationWithUserDto.class))
+                        .toList())
+
+                // Se não existir, retornar lista vazia
+                .orElseGet(Collections::emptyList);
+    }
+
+    public List<IntegrationWithBandDto> listIntegrationsByLoggedUser() {
+        return userService.listIntegrations(authUtils.getLoggedUser().getId());
     }
 
     public List<MusicDto> listMusics(final UUID id) {
