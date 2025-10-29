@@ -19,6 +19,7 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.exceptions.UserAlreadyInBandException;
@@ -40,56 +41,57 @@ public class BandController {
     private final BandService service;
 
     @GetMapping
-    @Operation(summary = "Listar tudo", description = "Listar todas as bandas")
-    public ResponseEntity<List<BandDto>> listAll() {
-        return ResponseEntity.ok(service.listAll());
+    @Operation(summary = "Listar todas as bandas das quais eu participo")
+    public ResponseEntity<List<IntegrationWithBandDto>> listMyBands() {
+        return ResponseEntity.ok(service.listIntegrationsByLoggedUser());
     }
 
     @PostMapping
-    @Operation(summary = "Cadastrar", description = "Cadastrar nova banda")
+    @Operation(summary = "Cadastrar nova banda")
     public ResponseEntity<BandWithJoinCodeDto> create(@RequestBody final BandRequest request) {
         val body = service.create(request);
         return ResponseEntity.status(201).body(body);
     }
 
     @GetMapping("{id}")
-    @Operation(summary = "Detalhar", description = "Consultar detalhes da banda")
+    @Operation(summary = "Consultar detalhes da banda")
     public ResponseEntity<BandDto> findById(@PathVariable final UUID id) {
         return handleOptional(service.findById(id));
     }
 
     @GetMapping("{id}/join-code")
-    @Operation(summary = "Detalhar com Join Code", description = "Consultar detalhes da banda, incluindo o Join Code")
+    @Operation(summary = "Consultar detalhes da banda, incluindo o Join Code")
     public ResponseEntity<BandWithJoinCodeDto> findByIdWithJoinCode(@PathVariable final UUID id) {
         return handleOptional(service.findByIdWithJoinCode(id));
     }
 
     @GetMapping("join-code/{joinCode}")
-    @Operation(summary = "Detalhar por Join Code", description = "Consultar detalhes da banda a partir do Join Code")
+    @Operation(summary = "Consultar detalhes da banda a partir do Join Code")
     public ResponseEntity<BandDto> findByJoinCode(@PathVariable final String joinCode) {
         return handleOptional(service.findByJoinCode(joinCode));
     }
 
     @PutMapping("{id}")
-    @Operation(summary = "Atualizar", description = "Editar dados da banda")
+    @Operation(summary = "Editar dados da banda")
     public ResponseEntity<BandDto> update(@PathVariable final UUID id, @RequestBody final BandRequest request) {
         return handleOptional(service.update(id, request));
     }
 
     @PutMapping("{id}/join-code")
-    @Operation(summary = "Redefinir Join Code", description = "Gerar novo Join Code para a banda")
+    @Operation(summary = "Gerar novo Join Code para a banda")
     public ResponseEntity<BandWithJoinCodeDto> changeJoinCode(@PathVariable final UUID id) {
         return handleOptional(service.changeJoinCode(id));
     }
 
     @DeleteMapping("{id}")
-    @Operation(summary = "Deletar", description = "Deletar a banda")
+    @Operation(summary = "Deletar a banda")
     public ResponseEntity<Void> delete(@PathVariable final UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("join/{joinCode}")
+    @Operation(summary = "Ingressar na banda")
     public ResponseEntity<IntegrationDto> join(@PathVariable final String joinCode) {
         try {
             return handleOptional(service.join(joinCode));
@@ -99,13 +101,13 @@ public class BandController {
     }
 
     @GetMapping("{id}/musics")
-    @Operation(summary = "Listar músicas", description = "Listar todas as músicas do repertório da banda")
+    @Operation(summary = "Listar todas as músicas do repertório da banda")
     public ResponseEntity<List<MusicDto>> listMusics(@PathVariable final UUID id) {
         return ResponseEntity.ok(service.listMusics(id));
     }
 
     @PostMapping("{id}/musics")
-    @Operation(summary = "Cadastrar música", description = "Cadastrar nova música no repertório da banda")
+    @Operation(summary = "Cadastrar nova música no repertório da banda")
     public ResponseEntity<MusicDto> createMusic(@PathVariable final UUID id,
             @RequestBody @Valid final MusicRequest.WithThemes request) {
         return handleOptional(service.createMusic(id, request));

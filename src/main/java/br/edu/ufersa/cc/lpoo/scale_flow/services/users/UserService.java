@@ -1,5 +1,6 @@
 package br.edu.ufersa.cc.lpoo.scale_flow.services.users;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.users.UserWithPasswordDto;
@@ -63,6 +65,19 @@ public class UserService {
 
                 // Senão, lançar exceção
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_MESSAGE));
+    }
+
+    public List<IntegrationWithBandDto> listIntegrations(final UUID id) {
+        // Buscar
+        return repository.findById(id)
+
+                // Se encontrar, gerar lista de DTOs
+                .map(entity -> entity.getIntegrations().stream()
+                        .map(integration -> mapper.map(integration, IntegrationWithBandDto.class))
+                        .toList())
+
+                // Senão, trazer lista vazia
+                .orElseGet(Collections::emptyList);
     }
 
     public UserDto update(final UUID id, final UserRequest form) {

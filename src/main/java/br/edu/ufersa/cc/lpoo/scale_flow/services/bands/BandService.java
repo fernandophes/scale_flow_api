@@ -13,6 +13,7 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
@@ -21,6 +22,7 @@ import br.edu.ufersa.cc.lpoo.scale_flow.entities.users.User;
 import br.edu.ufersa.cc.lpoo.scale_flow.enums.IntegrationType;
 import br.edu.ufersa.cc.lpoo.scale_flow.repositories.bands.BandRepository;
 import br.edu.ufersa.cc.lpoo.scale_flow.services.repertoire.MusicService;
+import br.edu.ufersa.cc.lpoo.scale_flow.services.users.UserService;
 import br.edu.ufersa.cc.lpoo.scale_flow.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -36,6 +38,7 @@ public class BandService {
     private final BandRepository repository;
 
     private final AuthUtils authUtils;
+    private final UserService userService;
     private final MusicService musicService;
 
     public List<BandDto> listAll() {
@@ -47,9 +50,21 @@ public class BandService {
                 .toList();
     }
 
+    public List<IntegrationWithBandDto> listIntegrationsByLoggedUser() {
+        return userService.listIntegrations(authUtils.getLoggedUser().getId());
+    }
+
     public BandWithJoinCodeDto create(final BandRequest request) {
         // Gerar entidade
         val entity = mapper.map(request, Band.class);
+
+        // Adicionar usuário logado como ADM
+        val loggedUser = mapper.map(authUtils.getLoggedUser(), User.class);
+        val admin = new Integration();
+        admin.setBand(entity);
+        admin.setUser(loggedUser);
+        admin.setType(IntegrationType.ADMIN);
+        entity.setIntegrations(List.of(admin));
 
         // Definir código de ingresso
         entity.setJoinCode(generateJoinCode());
