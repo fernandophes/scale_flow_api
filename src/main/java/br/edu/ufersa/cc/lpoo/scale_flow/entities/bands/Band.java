@@ -50,14 +50,17 @@ public class Band {
      * Relacionamentos não mapeados
      */
 
-    @OneToMany(mappedBy = "band", cascade = CascadeType.ALL)
-    private List<Integration> integrations;
-
     @ManyToMany
     @JoinTable(name = "integrations", joinColumns = @JoinColumn(name = "band_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> integrants;
 
+    @OneToMany(mappedBy = "band", cascade = CascadeType.ALL)
+    private List<Integration> integrations;
+
     @OneToMany(mappedBy = "ownerBand", cascade = CascadeType.ALL)
     private List<Music> musics;
+
+    @OneToMany(mappedBy = "ownerBand", cascade = CascadeType.ALL)
+    private List<Role> roles;
 
 }

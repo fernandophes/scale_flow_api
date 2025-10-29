@@ -1,5 +1,6 @@
 package br.edu.ufersa.cc.lpoo.scale_flow.controllers.bands;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +22,8 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithUserDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.RoleDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.RoleRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.exceptions.UserAlreadyInBandException;
@@ -117,7 +120,32 @@ public class BandController {
     @Operation(summary = "Cadastrar nova música no repertório da banda")
     public ResponseEntity<MusicDto> createMusic(@PathVariable final UUID id,
             @RequestBody @Valid final MusicRequest.WithThemes request) {
-        return handleOptional(service.createMusic(id, request));
+        return service.createMusic(id, request)
+                .map(dto -> ResponseEntity.status(201).body(dto))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("{id}/roles")
+    @Operation(summary = "Listar todos os papéis da banda")
+    public ResponseEntity<List<RoleDto>> listRoles(@PathVariable final UUID id) {
+        return ResponseEntity.ok(service.listRoles(id));
+    }
+
+    @PostMapping("{id}/roles")
+    @Operation(summary = "Cadastrar novo papel na banda")
+    public ResponseEntity<RoleDto> createRole(@PathVariable final UUID id, final @RequestBody RoleRequest request) {
+        return service.createRole(id, request)
+                .map(dto -> ResponseEntity.status(201).body(dto))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("{id}/roles/multiple")
+    @Operation(summary = "Cadastrar novos papéis na banda, vários de uma vez")
+    public ResponseEntity<List<RoleDto>> createMultipleRoles(@PathVariable final UUID id,
+            final @RequestBody Collection<String> roles) {
+        return service.createMultipleRoles(id, roles)
+                .map(dto -> ResponseEntity.status(201).body(dto))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     private <T> ResponseEntity<T> handleOptional(final Optional<T> optional) {

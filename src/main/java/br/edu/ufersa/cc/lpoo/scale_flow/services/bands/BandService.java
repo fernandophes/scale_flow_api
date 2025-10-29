@@ -1,5 +1,6 @@
 package br.edu.ufersa.cc.lpoo.scale_flow.services.bands;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.BandWithJoinCodeDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithBandDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.IntegrationWithUserDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.RoleDto;
+import br.edu.ufersa.cc.lpoo.scale_flow.dto.bands.RoleRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicDto;
 import br.edu.ufersa.cc.lpoo.scale_flow.dto.repertoire.MusicRequest;
 import br.edu.ufersa.cc.lpoo.scale_flow.entities.bands.Band;
@@ -40,6 +43,7 @@ public class BandService {
 
     private final AuthUtils authUtils;
     private final UserService userService;
+    private final RoleService roleService;
     private final MusicService musicService;
 
     public List<BandDto> listAll() {
@@ -178,7 +182,7 @@ public class BandService {
 
     public List<MusicDto> listMusics(final UUID id) {
         return repository.findById(id)
-                .map(entity -> entity.getMusics().stream()
+                .map(band -> band.getMusics().stream()
                         .map(music -> mapper.map(music, MusicDto.class))
                         .toList())
                 .orElseGet(Collections::emptyList);
@@ -186,7 +190,30 @@ public class BandService {
 
     public Optional<MusicDto> createMusic(final UUID id, final MusicRequest.WithThemes request) {
         return repository.findById(id)
-                .map(entity -> musicService.create(entity, request));
+                .map(band -> musicService.create(band, request));
+    }
+
+    public List<RoleDto> listRoles(final UUID id) {
+        return repository.findById(id)
+                .map(band -> band.getRoles().stream()
+                        .map(role -> mapper.map(role, RoleDto.class))
+                        .toList())
+                .orElseGet(Collections::emptyList);
+    }
+
+    public Optional<RoleDto> createRole(final UUID id, final RoleRequest request) {
+        return repository.findById(id)
+                .map(band -> roleService.create(band, request));
+    }
+
+    public Optional<List<RoleDto>> createMultipleRoles(final UUID id, final Collection<String> roleNames) {
+        return repository.findById(id)
+                .map(band -> roleNames.stream()
+                        .map(role -> {
+                            val request = new RoleRequest().setName(role);
+                            return roleService.create(band, request);
+                        })
+                        .toList());
     }
 
     private String generateJoinCode() {
